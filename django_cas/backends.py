@@ -131,7 +131,8 @@ class CASBackend(object):
         if not username:
             return None
 
-        user, created = User.objects.get_or_create(username=username)
+        user, created = self.get_or_create_user(username,
+            authentication_response)
         if created:
             user.set_unusable_password()
 
@@ -140,6 +141,9 @@ class CASBackend(object):
 
         user.save()
         return user
+
+    def get_or_create_user(self, cas_username, authentication_response):
+        return User.objects.get_or_create(username=cas_username)
 
     def get_user(self, user_id):
         """Retrieve the user's entry in the User model if it exists"""
