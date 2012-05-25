@@ -8,7 +8,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.auth.views import login, logout
 from django.core.urlresolvers import reverse
 
-from django_cas.views import login as cas_login, logout as cas_logout, _service_url
+from django_cas.views import login as cas_login, logout as cas_logout, _service_url, _redirect_url
 
 __all__ = ['CASMiddleware']
 
@@ -22,7 +22,7 @@ class CASMiddleware(object):
 
         if ticket:
             from django.contrib import auth
-            user = auth.authenticate(ticket=ticket, service=_service_url(request))
+            user = auth.authenticate(ticket=ticket, service=_service_url(request), redirect_to=_redirect_url(request))
             if user is not None:
                 auth.login(request, user)
 
