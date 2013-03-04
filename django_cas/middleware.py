@@ -35,9 +35,17 @@ class CASMiddleware(object):
         logout.
         """
 
-        if view_func == login:
+        def is_admin_authentication(viewf, function_name):
+            """
+            The previous code here did not work with current admin functionality
+            so we're matching in an admittedly nonpythonic way against the admin
+            login/logout paths. Update to this function quite welcome!
+            """
+            return viewf.__module__.startswith('django.contrib.admin.sites') and viewf.__name__ is function_name
+
+        if is_admin_authentication(view_func, 'login'):
             return cas_login(request, *view_args, **view_kwargs)
-        elif view_func == logout:
+        elif is_admin_authentication(view_func, 'logout'):
             return cas_logout(request, *view_args, **view_kwargs)
 
         if settings.CAS_ADMIN_PREFIX:
