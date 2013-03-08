@@ -7,3 +7,9 @@
 
 # PyDev garbage
 .tmp*
+
+# Editor temp file garbage
+*.*~
+
+# Test configuration file
+test_config.py
