@@ -17,23 +17,26 @@ from urlparse import urljoin
 import cookielib
 from xml.dom import minidom
 
-# Add in a separate test_config file if you wish of the following format
+# Defaults for testing. You can replace them here or add a test_config.py
+CAS_SERVER_URL = 'https://my.sso.server/'
+APP_URL = 'http://my.client.application/'
+APP_RESTRICTED = 'restricted'
+PROXY_URL = 'https://my.proxy.application/'
+# Depending on your cas login form you may need to adjust these field name keys
+TOKEN = 'token'                    # CSRF token field name
+CAS_SUCCESS = 'Login successful'   # CAS server successful login flag (find string in html page)
+AUTH = {'username' : '',           # user field name
+        'password' : '',           # password field name
+        'submit' : 'Login'         # login submit button
+       }
+SCRIPT = 'manage.py shell --plain < get_pgt.py' # A script to extract the PGT from your proxying server
+
 try:
     from test_config import *
 except:
-    # Please edit these urls to match your cas server, proxy and app server urls
-    CAS_SERVER_URL = 'https://my.sso.server/'
-    APP_URL = 'http://my.client.application/'
-    APP_RESTRICTED = 'restricted'
-    PROXY_URL = 'https://my.proxy.application/'
-    # Depending on your cas login form you may need to adjust these field name keys
-    TOKEN = 'token'                    # CSRF token field name
-    CAS_SUCCESS = 'Login successful'   # CAS server successful login flag (find string in html page)
-    AUTH = {'username' : '',           # user field name
-            'password' : '',           # password field name
-            'submit' : 'Login'         # login submit button
-           }
-    SCRIPT = 'manage.py shell --plain < get_pgt.py' # A script to extract the PGT from your proxying server
+    pass
+
+
 
 class TestCAS(unittest.TestCase):
     """ A class for testing a CAS setup both for standard and proxy authentication """
@@ -125,7 +128,9 @@ class TestCAS(unittest.TestCase):
             self.auth['username'] = sys.argv[1]
         else:
             self.auth['username'] = getpass.getuser()
-        self.auth['password'] = getpass.getpass('CAS Password for user %s:' % AUTH['username'])        
+        auth_message = 'Host: {1} | CAS Password for user {0}:'
+        auth_message = auth_message.format(AUTH['username'], CAS_SERVER_URL)
+        self.auth['password'] = getpass.getpass(auth_message)
         return 
 
     def get_token(self, url=None, token=TOKEN, page=''):
