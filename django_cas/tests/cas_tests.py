@@ -7,36 +7,17 @@
 # python cas_tests.py [username]  
 # You will need to edit the constants below to match your setup ...
 
-import unittest
-import sys
 import commands
-import getpass
-import urllib2
-import urllib
-from urlparse import urljoin
 import cookielib
+import getpass
+import sys
+import unittest
+import urllib
+import urllib2
+from urlparse import urljoin
 from xml.dom import minidom
 
-# Defaults for testing. You can replace them here or add a test_config.py
-CAS_SERVER_URL = 'https://my.sso.server/'
-APP_URL = 'http://my.client.application/'
-APP_RESTRICTED = 'restricted'
-PROXY_URL = 'https://my.proxy.application/'
-# Depending on your cas login form you may need to adjust these field name keys
-TOKEN = 'token'                    # CSRF token field name
-CAS_SUCCESS = 'Login successful'   # CAS server successful login flag (find string in html page)
-AUTH = {'username' : '',           # user field name
-        'password' : '',           # password field name
-        'submit' : 'Login'         # login submit button
-       }
-SCRIPT = 'manage.py shell --plain < get_pgt.py' # A script to extract the PGT from your proxying server
-
-try:
-    from test_config import *
-except:
-    pass
-
-
+from settings import *
 
 class TestCAS(unittest.TestCase):
     """ A class for testing a CAS setup both for standard and proxy authentication """
@@ -121,7 +102,7 @@ class TestCAS(unittest.TestCase):
         self.proxy5_login(new_pt)
         return
 
-        
+
     def get_auth(self):
         """ Get authentication by passing to this script on the command line """
         if len(sys.argv) > 1:
