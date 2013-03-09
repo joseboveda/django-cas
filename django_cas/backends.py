@@ -6,7 +6,7 @@ from urlparse import urljoin
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django_cas.models import User, Tgt, PgtIOU
-from django_cas import CAS
+from django_cas.settings import CAS
 
 __all__ = ['CASBackend']
 

@@ -8,7 +8,7 @@ from django_cas.exceptions import CasTicketException, CasConfigException
 # Ed Crewe - add in signals to delete old tickets
 from django.db.models.signals import post_save
 from datetime import datetime, timedelta
-from django_cas import CAS
+from django_cas.settings import CAS
 
 User = get_user_model()
 
